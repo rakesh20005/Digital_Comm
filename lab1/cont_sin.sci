@@ -1,0 +1,10 @@
+n = 0:40;
+f =0.05 ;
+phase = 0;
+A = 1.5;
+x = A * sin(2 * %pi * f * n - phase);
+xgrid(4, 1, 7);       
+plot(n, x, 'g','LineWidth',2);
+xlabel("n");
+ylabel("x[n]");
+title("Sine Wave");
