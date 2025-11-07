@@ -1,0 +1,62 @@
+clc;
+clear;
+close;
+
+data = [1,0,1,1];   
+n = 100;              // Samples per bit
+fc = 10*%pi;           // Carrier frequency
+fc1 = 5*%pi;        // FSK frequency for bit=1
+fc2 = 2*%pi;        // FSK frequency for bit=0
+
+ASK = [];
+FSK = [];
+PSK = [];
+
+t = linspace(0,1,n);  // Time for one bit period
+
+for i = 1:length(data)
+    // ASK modulation
+    ASK_BIT = data(i) * sin(fc * t);
+    ASK = [ASK ASK_BIT];
+
+    // FSK modulation
+    if data(i) == 1 then
+        FSK_BIT = sin(fc1 * t);
+        PSK_BIT = sin(fc * t);
+    else
+        FSK_BIT = sin(fc2 * t);
+        PSK_BIT = sin(fc * t + %pi);
+    end
+
+    FSK = [FSK FSK_BIT];
+    PSK = [PSK PSK_BIT];
+end
+
+// Create total time vector for all bits
+tt = linspace(0, length(data), length(ASK));
+
+// --- Plotting Section ---
+f = scf(0);
+clf(f);
+
+subplot(4,1,1);
+plot2d2(0:length(data)-1, data);
+xtitle('Input Data Bits','','Amplitude');
+xgrid();
+
+subplot(4,1,2);
+plot(tt, ASK, 'LineWidth', 2);
+xtitle('Amplitude Shift Keying (ASK)','','Amplitude');
+xgrid();
+
+subplot(4,1,3);
+plot(tt, FSK, 'LineWidth', 2);
+xtitle('Frequency Shift Keying (FSK)','','Amplitude');
+xgrid();
+
+subplot(4,1,4);
+plot(tt, PSK, 'LineWidth', 2);
+xtitle('Phase Shift Keying (PSK)','','Amplitude');
+xgrid();
+
+show_window();
